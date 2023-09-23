@@ -18,9 +18,9 @@ export default function MessageBoard() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const author = event.currentTarget.author.value || 'Anonymous';
-    const message = event.currentTarget.message.value;
-    dispatch(sendMessage({ author, message, image })); // image здесь - это строка Base64
+    const title = event.currentTarget.author.value || 'Anonymous';
+    const content = event.currentTarget.message.value;
+    dispatch(sendMessage({ title, content, image })); // image здесь - это строка Base64
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,9 +72,8 @@ export default function MessageBoard() {
       <div>
         {messages.map((message:IMessages) => (
           <div className="message" key={message.id} >
-            <h4>{message.author}</h4>
-            <p>{message.message}</p>
-            <p>{message.datetime}</p>
+            <h4>{message.title}</h4>
+            <p>{message.content}</p>
             {message.image && <img src={message.image} alt="" />}
             
             <button className="delete-button" onClick={() => (remMessage(message.id as string))

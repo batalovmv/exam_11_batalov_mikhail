@@ -15,7 +15,7 @@ export const fetchMessages = createAsyncThunk(
   "messages/fetchMessages",
   async () => {
     try {
-      const response = await axiosInstanse.get("/messages");
+      const response = await axiosInstanse.get("/news");
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) { // нашел решение с типизацией для error но до конца не уверен, оптимальное это решение или костыль
@@ -32,7 +32,7 @@ export const sendMessage = createAsyncThunk(
   "messages/sendMessage",
   async (message: IMessages) => {
     try {
-      const response = await axiosInstanse.post("/messages", message);
+      const response = await axiosInstanse.post("/news", message);
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) { // нашел решение с типизацией для error но до конца не уверен, оптимальное это решение или костыль
@@ -48,7 +48,7 @@ export const removeMessage = createAsyncThunk(
   "messages/removeMessage",
   async (id: string) => {
     try {
-      const response = await axiosInstanse.delete(`/messages/${id}`);
+      const response = await axiosInstanse.delete(`/news/${id}`);
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) { // нашел решение с типизацией для error но до конца не уверен, оптимальное это решение или костыль

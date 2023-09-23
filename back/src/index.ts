@@ -5,8 +5,9 @@ import { CommentEntController } from './controllers/comments.controller';
 import { ItemController } from './controllers/news.controller';
 import { UploadController } from './controllers/uploadController';
 import multer from 'multer';
-
+import cors from 'cors';
 const app = express();
+app.use(cors());
 const upload = multer();
 
 AppDataSource.initialize().then(async () => {

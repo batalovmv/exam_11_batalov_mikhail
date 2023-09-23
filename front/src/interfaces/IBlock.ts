@@ -1,9 +1,9 @@
 export interface IMessages {
   id?: string,
 
-  message: string,
+  title: string,
 
-  author: string,
+  content: string,
   image?: string|null,
-  datetime?: string
+  
 }
