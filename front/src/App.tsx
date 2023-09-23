@@ -5,7 +5,7 @@ import { Container, CssBaseline } from '@mui/material';
 
 
 import Blocks from "./containers/Blocks/Blocks";
-import CommentsBoard from './components/comments';
+import CommentsBoard from './components/CommentsBoard';
 
 
 
