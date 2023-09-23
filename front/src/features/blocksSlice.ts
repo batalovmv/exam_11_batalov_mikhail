@@ -49,6 +49,31 @@ export const fetchMessages = createAsyncThunk(
     }
   }
 );
+// для создания комментария , НЕДОДЕЛАНО
+export const createComment = createAsyncThunk(
+  "comments/createComment",
+  async ({ newsId, comment }) => {
+    try {
+      const response = await axiosInstanse.post(`/comments`, { comment });
+      return response.data;
+    } catch (error: unknown) {
+      // обработка ошибок
+    }
+  }
+);
+
+// для удаления комментария, НЕДОДЕЛАНО
+export const deleteComment = createAsyncThunk(
+  "comments/deleteComment",
+  async ({  commentId }) => {
+    try {
+      const response = await axiosInstanse.delete(`/comments/${commentId}`);
+      return response.data;
+    } catch (error: unknown) {
+      
+    }
+  }
+);
   
 //  для отправки сообщения
 export const sendMessage = createAsyncThunk(
