@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { Category } from './entities/category.entity';
-import { Item } from './entities/item.entity';
-import { Location } from './entities/location.entity';
+import { Item } from './entities/contentItem.entity';
+import { Location } from './entities/news.entity';
 export const AppDataSource = new DataSource({
   type: 'mysql',
   host: 'localhost',

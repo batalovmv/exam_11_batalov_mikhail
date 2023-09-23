@@ -1,9 +1,9 @@
 import { useExpressServer } from 'routing-controllers';
 import express from 'express';
 import { AppDataSource } from './data-source';
-import { LocationController } from './controllers/locationController';
+import { LocationController } from './controllers/ newsController';
 import { CategoryController } from './controllers/categoryController';
-import { ItemController } from './controllers/item.controller';
+import { ItemController } from './controllers/contentItem.controller';
 import { UploadController } from './controllers/uploadController';
 import multer from 'multer';
 

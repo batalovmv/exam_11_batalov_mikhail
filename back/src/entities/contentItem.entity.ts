@@ -4,10 +4,10 @@ import {
   Column,
   ManyToOne,
 } from 'typeorm';
-import { News } from './location.entity';
+import { News } from './news.entity';
 
 @Entity()
-export class Post {
+export class ContentItem {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -20,6 +20,6 @@ export class Post {
   @Column()
   comment!: string;
 
-  @ManyToOne(() => News, news => news.posts)
+  @ManyToOne(() => News, news => news.ContentItems)
   news!: News;
 }

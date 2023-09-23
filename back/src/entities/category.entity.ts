@@ -5,7 +5,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { Item } from './item.entity';
+import { Item } from './contentItem.entity';
 
 
 @Entity()

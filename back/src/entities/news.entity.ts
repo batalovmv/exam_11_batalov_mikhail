@@ -4,7 +4,7 @@ import {
   Column,
   OneToMany,
 } from 'typeorm';
-import { Post } from './item.entity';
+import { ContentItem } from './contentItem.entity';
 
 
 
@@ -25,7 +25,7 @@ export class News {
   @Column({ type: 'date' })
   publishedAt!: Date;
 
-  @OneToMany(() => Post, post => post.news)
-  posts!: Post[];
+  @OneToMany(() => ContentItem, ContentItem => ContentItem.news)
+  ContentItems!: ContentItem[];
 }
 

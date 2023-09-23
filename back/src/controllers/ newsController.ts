@@ -1,5 +1,5 @@
-import { locationRepository } from '../repositories/location.repository';
-import { Location } from '../entities/location.entity';
+import { newsRepository } from '../repositories/news.repository';
+import { Post } from '../entities/contentItem.entity';
 import { Body, Post, Get, JsonController,  QueryParams, Param, Delete, Put } from 'routing-controllers';
 import { Router } from 'express';
 @JsonController('/location')
