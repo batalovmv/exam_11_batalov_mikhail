@@ -4,30 +4,22 @@ import {
   Column,
   ManyToOne,
 } from 'typeorm';
-import { Category } from './category.entity';
-import { Location } from './location.entity';
+import { News } from './location.entity';
 
 @Entity()
-export class Item {
+export class Post {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => Category, (category) => category.id)
-  category!: Category;
+  @Column()
+  newsId!: number;
 
-  @ManyToOne(() => Location, (location) => location.id)
-  location!: Location;
-
-  
+  @Column({ default: 'Anonymous' })
+  author!: string;
 
   @Column()
-  name!: string;
+  comment!: string;
 
-  @Column({ nullable: true })
-  description!: string;
-
-  @Column({ type: 'text', nullable: true })
-  photo!: string | null;
-
-  
+  @ManyToOne(() => News, news => news.comments)
+  news: News;
 }
