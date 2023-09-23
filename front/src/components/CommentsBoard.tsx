@@ -27,7 +27,8 @@ export default function CommentsBoard() {
 
   return (
     <div className="comments-board">
-      <h2 className="comments-title">{data.title}</h2>
+      
+    
       {comments.length === 0 ? (
         <p>No comments yet. Be the first to comment!</p>
       ) : (

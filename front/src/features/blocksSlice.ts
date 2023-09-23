@@ -12,21 +12,7 @@ interface State {
 }
 
 
-export const fetchMessageById = createAsyncThunk(
-  "comments/fetchMessageById",
-  async (id: string) => {
-    try {
-      const response = await axiosInstanse.get(`/news/${id}`);
-      return response.data;
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      } else {
-        throw new Error("Произошла неизвестная ошибка.");
-      }
-    }
-  }
-);
+
 
 
 export const fetchComments = createAsyncThunk(
@@ -120,18 +106,7 @@ const messagesSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      .addCase(fetchMessageById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchMessageById.fulfilled, (state, action) => {
-        state.loading = false;
-        state.messages.push(action.payload);
-      })
-      .addCase(fetchMessageById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+      
       .addCase(fetchComments.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -139,6 +114,7 @@ const messagesSlice = createSlice({
       .addCase(fetchComments.fulfilled, (state, action) => {
         state.loading = false;
         state.comments = action.payload;
+        state.messages.push(action.payload);
       })
       .addCase(fetchComments.rejected, (state, action) => {
         state.loading = false;

@@ -56,11 +56,11 @@ export default function MessageBoard() {
 
       <form onSubmit={handleSubmit}>
         <label className='input'>
-          Author:
+          Discription:
           <input type="text" name="author" />
         </label>
         <label className='input'>
-          Message:
+          Tittle:
           <input type="text" name="message" required />
         </label>
         <label className='input'>
