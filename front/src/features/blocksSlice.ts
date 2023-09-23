@@ -6,6 +6,7 @@ import { IComments } from "../interfaces/IComments.ts";
 interface State {
   messages: IMessages[];
   comments: IComments[]; 
+  id:number;
   error: string | undefined | null;
   loading: boolean;
 }
@@ -30,10 +31,12 @@ export const fetchMessageById = createAsyncThunk(
 
 export const fetchComments = createAsyncThunk(
   "comments/fetchComments",
-  async (newsId: number) => { //  мы принимаем newsId в качестве параметра
+  async (newsId: number) => {
     try {
-      const response = await axiosInstanse.get(`/comments/${newsId}`);
-      return response.data;
+      const response = await axiosInstanse.get(`/news/${newsId}`);// в постмане все отрабатывает идеально а тут нет 
+      
+      console.log(response.data)
+      return response.data.comments;
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(error.message);
@@ -99,6 +102,7 @@ const initialState: State = {
   comments: [], 
   error: null,
   loading: false,
+  id:1
 };
 
 const messagesSlice = createSlice({
@@ -107,8 +111,12 @@ const messagesSlice = createSlice({
   reducers: {
     deleteMessage: (state, action: PayloadAction<string>) => {
       state.messages = state.messages.filter(message => message.id !== action.payload)
-    }// локальное удаление сообщения 
+    },// локальное удаление сообщения 
+    changeId: (state, action: PayloadAction<number>) => {
+      state.id = action.payload
+    },
   },
+  
   extraReducers: (builder) => {
     builder
 
@@ -118,7 +126,7 @@ const messagesSlice = createSlice({
       })
       .addCase(fetchMessageById.fulfilled, (state, action) => {
         state.loading = false;
-      
+        state.messages.push(action.payload);
       })
       .addCase(fetchMessageById.rejected, (state, action) => {
         state.loading = false;

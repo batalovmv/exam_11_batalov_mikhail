@@ -22,7 +22,7 @@ const App = () => (
       <Container maxWidth="xl">
 
         <Routes>
-          <Route path="/news/:id" element={<CommentsBoard />} />
+          <Route path="/news/:newsId" element={<CommentsBoard />} />
           <Route path="/news" element={<Blocks />} />
 
         </Routes>

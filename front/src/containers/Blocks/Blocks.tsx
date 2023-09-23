@@ -19,7 +19,7 @@ export default function MessageBoard() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const title = event.currentTarget.author.value || 'Anonymous';
+    const title = event.currentTarget.author.value;
     const content = event.currentTarget.message.value;
     dispatch(sendMessage({ title, content, image })); // image здесь - это строка Base64
   };
@@ -74,9 +74,9 @@ export default function MessageBoard() {
       <div>
         {messages.map((message:IMessages) => (
           <div className="message" key={message.id} >
-            <Link to={`/news/${message.id}`}>
+            
               <h4>{message.title}</h4>
-            </Link>
+            <Link to={`/news/${message.id}`}>Read More</Link>
             <p>{message.content}</p>
             {message.image && <img src={message.image} alt="" />}
             
