@@ -20,6 +20,6 @@ export class Post {
   @Column()
   comment!: string;
 
-  @ManyToOne(() => News, news => news.comments)
-  news: News;
+  @ManyToOne(() => News, news => news.posts)
+  news!: News;
 }
