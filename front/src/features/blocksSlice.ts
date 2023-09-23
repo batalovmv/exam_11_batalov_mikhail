@@ -1,21 +1,54 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { IMessages } from "../interfaces/IBlock.ts";
 import axiosInstanse from "../Api/axiosInstanse.ts";
-
+import { IComments } from "../interfaces/IComments.ts";
 
 interface State {
   messages: IMessages[];
+  comments: IComments[]; 
   error: string | undefined | null;
   loading: boolean;
 }
 
 
+export const fetchMessageById = createAsyncThunk(
+  "comments/fetchMessageById",
+  async (id: string) => {
+    try {
+      const response = await axiosInstanse.get(`/news/${id}`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      } else {
+        throw new Error("Произошла неизвестная ошибка.");
+      }
+    }
+  }
+);
+
+
+export const fetchComments = createAsyncThunk(
+  "comments/fetchComments",
+  async (newsId: number) => { //  мы принимаем newsId в качестве параметра
+    try {
+      const response = await axiosInstanse.get(`/comments/${newsId}`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      } else {
+        throw new Error("An unknown error occurred.");
+      }
+    }
+  }
+);
 //  для получения сообщений
 export const fetchMessages = createAsyncThunk(
-  "news/fetchNews",
+  "comments/fetchNews",
   async () => {
     try {
-      const response = await axiosInstanse.get("/news");
+      const response = await axiosInstanse.get(`/news/`);
       console.log(response.data)
       return response.data;
     } catch (error: unknown) {
@@ -46,7 +79,7 @@ export const sendMessage = createAsyncThunk(
 );
 // для удаления сообщения
 export const removeMessage = createAsyncThunk(
-  "news/removenews",
+  "comments/remove",
   async (id: string) => {
     try {
       const response = await axiosInstanse.delete(`/news/${id}`);
@@ -63,6 +96,7 @@ export const removeMessage = createAsyncThunk(
 
 const initialState: State = {
   messages: [],
+  comments: [], 
   error: null,
   loading: false,
 };
@@ -77,6 +111,31 @@ const messagesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      .addCase(fetchMessageById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMessageById.fulfilled, (state, action) => {
+        state.loading = false;
+      
+      })
+      .addCase(fetchMessageById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(fetchComments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchComments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.comments = action.payload;
+      })
+      .addCase(fetchComments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
       .addCase(fetchMessages.pending, (state) => {
         state.loading = true;
         state.error = null;

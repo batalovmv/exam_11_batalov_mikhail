@@ -5,6 +5,7 @@ import { Container, CssBaseline } from '@mui/material';
 
 
 import Blocks from "./containers/Blocks/Blocks";
+import CommentsBoard from './components/comments';
 
 
 
@@ -21,8 +22,8 @@ const App = () => (
       <Container maxWidth="xl">
 
         <Routes>
-
-          <Route path="/" element={<Blocks />} />
+          <Route path="/news/:id" element={<CommentsBoard />} />
+          <Route path="/news" element={<Blocks />} />
 
         </Routes>
 

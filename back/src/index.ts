@@ -15,7 +15,7 @@ AppDataSource.initialize().then(async () => {
     classTransformer: true,
     validation: true,
     controllers: [CommentEntController, ItemController, UploadController],
-    middlewares: [upload.any()]  // добавляем multer как middleware
+    middlewares: [upload.any()]  
   });
 
   app.all('*', (req, res) => {

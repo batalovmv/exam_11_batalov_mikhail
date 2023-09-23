@@ -30,13 +30,13 @@ export class ItemController {
   }
 
   @Get('/:id')
-  async getOne(@Param('id') itemId: number) {
+  async getOne(@Param('id') newsId: number) {
     try {
-      const item = await NewsRepository.findOne({ where: { id: itemId } });
-      if (!item) {
-        throw new Error('Item not found');
+      const news = await NewsRepository.findOne({ where: { id: newsId }, relations: ["comments"] });
+      if (!news) {
+        throw new Error('News not found');
       }
-      return item; // Отдаем один объект со всеми полями
+      return news; 
     } catch (error) {
       console.error(error);
       throw error;
@@ -70,13 +70,13 @@ export class ItemController {
   @Delete('/:id')
   async delete(@Param('id') itemId: number) {
     try {
-      // Здесь вы можете добавить код для проверки наличия связанных ресурсов
+    
       const item = await NewsRepository.findOne({ where: { id: itemId } });
       if (!item) {
         throw new Error('Item not found');
       }
       
-      await NewsRepository.remove(item); // Удаляем ресурс
+      await NewsRepository.remove(item); 
       return { message: 'Item deleted' };
     } catch (error) {
       console.error(error);
@@ -92,8 +92,8 @@ export class ItemController {
         throw new Error('Item not found');
       }
       item = NewsRepository.merge(item, itemData);
-      await NewsRepository.save(item); // Обновляем ресурс
-      return item; // Отдаем один объект со всеми полями, включая ID
+      await NewsRepository.save(item); 
+      return item; 
     } catch (error) {
       console.error(error);
       throw error;

@@ -2,6 +2,14 @@ import { CommentEntRepository } from '../repositories/coment.repository';
 import { CommentEnt } from '../entities/comment.entity';
 import { Body, Post, Get, JsonController,  QueryParams, Param, Delete, Put } from 'routing-controllers';
 import { Router } from 'express';
+import { getRepository } from 'typeorm';
+import { NewsRepository } from '../repositories/news.repository';
+interface CommentData {
+  newsId: number;
+  author: string;
+  comment: string;
+}
+
 @JsonController('/comments')
 export class CommentEntController  {
   constructor(private router: Router) { }
@@ -10,7 +18,7 @@ export class CommentEntController  {
   async getAll() {
     try {
       const items = await CommentEntRepository.find();
-      return items.map(location => ({ id: location.id, name: location.news })); // Отдаем только ID и название предмета
+      return items.map(location => ({ id: location.id, name: location.news })); 
     } catch (error) {
       console.error(error);
       throw error;
@@ -24,7 +32,7 @@ export class CommentEntController  {
       if (!item) {
         throw new Error('Item not found');
       }
-      return item; // Отдаем один объект со всеми полями
+      return item;
     } catch (error) {
       console.error(error);
       throw error;
@@ -32,11 +40,25 @@ export class CommentEntController  {
   }
 
   @Post()
-  async create(@Body() itemData: CommentEnt) {
+  async create(@Body() itemData: CommentData) {
     try {
-      const newItem = CommentEntRepository.create(itemData);
+      
+      const { newsId, ...commentData } = itemData;
+
+     
+      const newsItem = await NewsRepository.findOne({ where: { id: newsId }});
+      if (!newsItem) {
+        throw new Error('News item not found');
+      }
+
+      
+      const newItem = CommentEntRepository.create({
+        ...commentData,
+        news: newsItem, 
+      });
+
       await CommentEntRepository.save(newItem);
-      return newItem; // Отдаем один объект со всеми полями, включая ID выданный базой данных
+      return newItem; 
     } catch (error) {
       console.error(error);
       throw error;

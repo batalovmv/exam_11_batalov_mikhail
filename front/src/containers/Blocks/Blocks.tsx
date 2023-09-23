@@ -1,10 +1,11 @@
 
 import { useEffect, useState } from 'react';
-import { removeMessage } from '../../features/blocksSlice';
+import { fetchComments, removeMessage } from '../../features/blocksSlice';
 import { deleteMessage } from '../../features/blocksSlice';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { fetchMessages, sendMessage } from '../../features/blocksSlice';
 import { IMessages } from '../../interfaces/IBlock';
+import { Link } from 'react-router-dom';
 
 
 export default function MessageBoard() {
@@ -52,6 +53,7 @@ export default function MessageBoard() {
 
   return (
     <div className="container">
+
       <form onSubmit={handleSubmit}>
         <label className='input'>
           Author:
@@ -72,7 +74,9 @@ export default function MessageBoard() {
       <div>
         {messages.map((message:IMessages) => (
           <div className="message" key={message.id} >
-            <h4>{message.title}</h4>
+            <Link to={`/news/${message.id}`}>
+              <h4>{message.title}</h4>
+            </Link>
             <p>{message.content}</p>
             {message.image && <img src={message.image} alt="" />}
             
