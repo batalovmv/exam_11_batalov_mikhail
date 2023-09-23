@@ -2,11 +2,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  CreateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { ContentItem } from './contentItem.entity';
 
-
+import { CommentEnt } from './comment.entity';
 
 @Entity()
 export class News {
@@ -19,13 +19,12 @@ export class News {
   @Column()
   content!: string;
 
-  @Column({ nullable: true })
-  image!: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  image!: string|null;
 
-  @Column({ type: 'date' })
-  publishedAt!: Date;
+  @CreateDateColumn()
+  date!: Date;
 
-  @OneToMany(() => ContentItem, ContentItem => ContentItem.news)
-  ContentItems!: ContentItem[];
+  @OneToMany(() => CommentEnt, (comment) => comment.news)
+  comments!: CommentEnt[];
 }
-

@@ -1,4 +1,4 @@
-import { News } from '../entities/news.entity';
 import { AppDataSource } from '../data-source';
+import { News } from '../entities/news.entity';
 
-export const newsRepository = AppDataSource.getRepository(News);
+export const NewsRepository = AppDataSource.getRepository(News);

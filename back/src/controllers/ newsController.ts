@@ -1,16 +1,28 @@
-import { newsRepository } from '../repositories/news.repository';
-import { Post } from '../entities/contentItem.entity';
-import { Body, Post, Get, JsonController,  QueryParams, Param, Delete, Put } from 'routing-controllers';
+import { NewsRepository } from '../repositories/news.repository';
+import { News } from '../entities/news.entity';
+import { Get, Post, Body, JsonController, Put, Param, Delete, UploadedFile } from 'routing-controllers';
 import { Router } from 'express';
-@JsonController('/location')
-export class LocationController  {
-  constructor(private router: Router) { }
+import multer from 'multer';
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+@JsonController('/news')
+export class NewsController {
 
   @Get()
   async getAll() {
     try {
-      const items = await locationRepository.find();
-      return items.map(location => ({ id: location.id, name: location.name })); // Отдаем только ID и название предмета
+      const newsItems = await NewsRepository.find();
+      return newsItems.map(item => ({ id: item.id, title: item.title })); // Возвращаем только ID и заголовок новостей
     } catch (error) {
       console.error(error);
       throw error;
@@ -18,13 +30,13 @@ export class LocationController  {
   }
 
   @Get('/:id')
-  async getOne(@Param('id') itemId: number) {
+  async getOne(@Param('id') newsId: number) {
     try {
-      const item = await locationRepository.findOne({ where: { id: itemId } });
-      if (!item) {
-        throw new Error('Item not found');
+      const newsItem = await NewsRepository.findOne({ where: { id: newsId } });
+      if (!newsItem) {
+        throw new Error('News not found');
       }
-      return item; // Отдаем один объект со всеми полями
+      return newsItem; // Возвращаем один объект со всеми полями
     } catch (error) {
       console.error(error);
       throw error;
@@ -32,11 +44,11 @@ export class LocationController  {
   }
 
   @Post()
-  async create(@Body() itemData: Location) {
+  async create(@Body() newsData: News) {
     try {
-      const newItem = locationRepository.create(itemData);
-      await locationRepository.save(newItem);
-      return newItem; // Отдаем один объект со всеми полями, включая ID выданный базой данных
+      const newNews = NewsRepository.create(newsData);
+      await NewsRepository.save(newNews);
+      return newNews; // Возвращаем один объект со всеми полями, включая ID выданный базой данных
     } catch (error) {
       console.error(error);
       throw error;
@@ -44,40 +56,17 @@ export class LocationController  {
   }
 
   @Delete('/:id')
-  async delete(@Param('id') itemId: number) {
+  async delete(@Param('id') newsId: number) {
     try {
-      // Здесь вы можете добавить код для проверки наличия связанных ресурсов
-      const item = await locationRepository.findOne({ where: { id: itemId }, relations: ['items'] });
-      if (!item) {
-        throw new Error('Item not found');
+      const newsItem = await NewsRepository.findOne({ where: { id: newsId } });
+      if (!newsItem) {
+        throw new Error('News not found');
       }
-      if (item.items && item.items.length > 0) {
-        throw new Error('Cannot delete location with associated items');
-      }
-
-      await locationRepository.remove(item); // Удаляем ресурс
-      return { message: 'Item deleted' };
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-
-  @Put('/:id')
-  async update(@Param('id') itemId: number, @Body() itemData: Location) {
-    try {
-      let item = await locationRepository.findOne({ where: { id: itemId } });
-      if (!item) {
-        throw new Error('Item not found');
-      }
-      item = locationRepository.merge(item, itemData);
-      await locationRepository.save(item); // Обновляем ресурс
-      return item; // Отдаем один объект со всеми полями, включая ID
+      await NewsRepository.remove(newsItem); // Удаляем новость
+      return { message: 'News deleted' };
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
 }
-
-

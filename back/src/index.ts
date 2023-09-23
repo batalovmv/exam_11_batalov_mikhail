@@ -1,9 +1,8 @@
 import { useExpressServer } from 'routing-controllers';
 import express from 'express';
 import { AppDataSource } from './data-source';
-import { LocationController } from './controllers/ newsController';
-import { CategoryController } from './controllers/categoryController';
-import { ItemController } from './controllers/contentItem.controller';
+import { CommentEntController } from './controllers/comments.controller';
+import { ItemController } from './controllers/news.controller';
 import { UploadController } from './controllers/uploadController';
 import multer from 'multer';
 
@@ -14,7 +13,7 @@ AppDataSource.initialize().then(async () => {
   useExpressServer(app, {
     classTransformer: true,
     validation: true,
-    controllers: [LocationController, CategoryController, ItemController, UploadController],
+    controllers: [CommentEntController, ItemController, UploadController],
     middlewares: [upload.any()]  // добавляем multer как middleware
   });
 
@@ -22,5 +21,5 @@ AppDataSource.initialize().then(async () => {
     res.status(404).json({ message: 'Route Not Found' });
   });
 
-  app.listen(3006);
+  app.listen(3100);
 });

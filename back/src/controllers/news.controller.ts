@@ -1,5 +1,5 @@
-import { contentItemRepository } from '../repositories/contentItem.repository';
-import { ContentItem } from '../entities/contentItem.entity';
+import { NewsRepository } from '../repositories/news.repository';
+import { News } from '../entities/news.entity';
 import { Get, Post, Body, JsonController, Put, Param, Delete, UploadedFile } from 'routing-controllers';
 import multer from 'multer';
 
@@ -15,14 +15,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-@JsonController('/items')
+@JsonController('/news')
 export class ItemController {
 
   @Get()
   async getAll() {
     try {
-      const items = await contentItemRepository.find();
-      return items.map(item => ({ id: item.id, name: item.name })); // Отдаем только ID и название предмета
+      const items = await NewsRepository.find();
+      return items.map(item => ({ id: item.id, name: item.title })); // Отдаем только ID и название предмета
     } catch (error) {
       console.error(error);
       throw error;
@@ -32,7 +32,7 @@ export class ItemController {
   @Get('/:id')
   async getOne(@Param('id') itemId: number) {
     try {
-      const item = await contentItemRepository.findOne({ where: { id: itemId } });
+      const item = await NewsRepository.findOne({ where: { id: itemId } });
       if (!item) {
         throw new Error('Item not found');
       }
@@ -46,19 +46,19 @@ export class ItemController {
   @Post()
   async create(
     @UploadedFile('photo', { options: upload }) file: any,
-    @Body() itemData: ContentItem
+    @Body() itemData: News
   ) {
     try {
-      if (!itemData.name) {
-        throw new Error('Item name is required');
+      if (!itemData.title) {
+        throw new Error('Item title is required');
       }
 
-      const newItem = contentItemRepository.create({
+      const newItem = NewsRepository.create({
         ...itemData,
-        photo: file ? `./uploads/${file.filename}` : null
+        image: file ? `./uploads/${file.filename}` : null
       });
 
-      await contentItemRepository.save(newItem);
+      await NewsRepository.save(newItem);
 
       return newItem;
     } catch (error) {
@@ -71,14 +71,12 @@ export class ItemController {
   async delete(@Param('id') itemId: number) {
     try {
       // Здесь вы можете добавить код для проверки наличия связанных ресурсов
-      const item = await contentItemRepository.findOne({ where: { id: itemId } });
+      const item = await NewsRepository.findOne({ where: { id: itemId } });
       if (!item) {
         throw new Error('Item not found');
       }
-      if (item.category||item.location) {
-        throw new Error('Cannot delete item that is associated with a category or location');
-      }
-      await contentItemRepository.remove(item); // Удаляем ресурс
+      
+      await NewsRepository.remove(item); // Удаляем ресурс
       return { message: 'Item deleted' };
     } catch (error) {
       console.error(error);
@@ -87,14 +85,14 @@ export class ItemController {
   }
 
   @Put('/:id')
-  async update(@Param('id') itemId: number, @Body() itemData: ContentItem) {
+  async update(@Param('id') itemId: number, @Body() itemData: News) {
     try {
-      let item = await contentItemRepository.findOne({ where: { id: itemId } });
+      let item = await NewsRepository.findOne({ where: { id: itemId } });
       if (!item) {
         throw new Error('Item not found');
       }
-      item = contentItemRepository.merge(item, itemData);
-      await contentItemRepository.save(item); // Обновляем ресурс
+      item = NewsRepository.merge(item, itemData);
+      await NewsRepository.save(item); // Обновляем ресурс
       return item; // Отдаем один объект со всеми полями, включая ID
     } catch (error) {
       console.error(error);

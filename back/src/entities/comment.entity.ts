@@ -4,22 +4,20 @@ import {
   Column,
   ManyToOne,
 } from 'typeorm';
+
 import { News } from './news.entity';
 
 @Entity()
-export class ContentItem {
+export class CommentEnt {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  newsId!: number;
+  @ManyToOne(() => News, (news) => news.comments)
+  news!: News;
 
-  @Column({ default: 'Anonymous' })
+  @Column({ default: "Anonymous" })
   author!: string;
 
   @Column()
   comment!: string;
-
-  @ManyToOne(() => News, news => news.ContentItems)
-  news!: News;
 }
