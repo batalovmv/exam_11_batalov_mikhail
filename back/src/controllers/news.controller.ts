@@ -22,9 +22,9 @@ export class ItemController {
   async getAll() {
     try {
       const items = await NewsRepository.find();
-      return items.map(item => ({ id: item.id, name: item.title })); // Отдаем только ID и название предмета
+      return items.map(item => ({ id: item.id, title: item.title ,content:item.content})); // Отдаем только ID и название предмета
     } catch (error) {
-      console.error(error);
+      console.error(error); 
       throw error;
     }
   }

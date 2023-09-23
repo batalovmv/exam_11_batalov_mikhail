@@ -12,10 +12,11 @@ interface State {
 
 //  для получения сообщений
 export const fetchMessages = createAsyncThunk(
-  "messages/fetchMessages",
+  "news/fetchNews",
   async () => {
     try {
       const response = await axiosInstanse.get("/news");
+      console.log(response.data)
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) { // нашел решение с типизацией для error но до конца не уверен, оптимальное это решение или костыль
@@ -29,7 +30,7 @@ export const fetchMessages = createAsyncThunk(
   
 //  для отправки сообщения
 export const sendMessage = createAsyncThunk(
-  "messages/sendMessage",
+  "news/sendNews",
   async (message: IMessages) => {
     try {
       const response = await axiosInstanse.post("/news", message);
@@ -45,7 +46,7 @@ export const sendMessage = createAsyncThunk(
 );
 // для удаления сообщения
 export const removeMessage = createAsyncThunk(
-  "messages/removeMessage",
+  "news/removenews",
   async (id: string) => {
     try {
       const response = await axiosInstanse.delete(`/news/${id}`);
